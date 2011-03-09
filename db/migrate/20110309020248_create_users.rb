@@ -8,6 +8,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string :last_name
       t.string :profile_picture
       t.string :email
+      t.float :monthly_rent
 
       t.timestamps
     end

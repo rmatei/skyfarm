@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110309020248) do
+ActiveRecord::Schema.define(:version => 20110309015439) do
 
   create_table "expenses", :force => true do |t|
     t.integer  "from_user_id",         :null => false
@@ -20,18 +20,6 @@ ActiveRecord::Schema.define(:version => 20110309020248) do
     t.integer  "type_id",              :null => false
     t.integer  "venmo_transaction_id"
     t.string   "pay_or_charge"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "users", :force => true do |t|
-    t.integer  "venmo_id",                     :null => false
-    t.string   "venmo_username"
-    t.integer  "facebook_id",     :limit => 8
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "profile_picture"
-    t.string   "email"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
