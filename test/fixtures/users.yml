@@ -1,0 +1,19 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  venmo_id: 1
+  venmo_username: MyString
+  facebook_id: 
+  first_name: MyString
+  last_name: MyString
+  profile_picture: MyString
+  email: MyString
+
+two:
+  venmo_id: 1
+  venmo_username: MyString
+  facebook_id: 
+  first_name: MyString
+  last_name: MyString
+  profile_picture: MyString
+  email: MyString

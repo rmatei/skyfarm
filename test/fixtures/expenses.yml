@@ -1,0 +1,19 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  from_user_id: 1
+  to_user_id: 1
+  amount: 1.5
+  note: MyString
+  type_id: 1
+  venmo_transaction_id: 1
+  pay_or_charge: MyString
+
+two:
+  from_user_id: 1
+  to_user_id: 1
+  amount: 1.5
+  note: MyString
+  type_id: 1
+  venmo_transaction_id: 1
+  pay_or_charge: MyString

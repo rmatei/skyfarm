@@ -3,13 +3,15 @@ class VenmoController < ApplicationController
   # takes Venmo API call, creates new expense
   def track_receipt
     # extracts serialized string from parameters
-    data = params.first.last.keys.first
+    data = params.select {|k,v| k.to_s.include? "payment"}
+    data = data.first.last.keys.first.dup
     
     # remove malformed parameter that JSON chokes on
-    clean_data = data.gsub(/\"img_url.*?, /, "").gsub(/\"img_url.*?, /, "")
+    data = data.gsub(/\"img_url.*?, /m, "")
     
-    data = JSON.parse clean_data
-    logger.info data.inspect
+    # parse JSON
+    data = JSON.parse data
+    logger.info "parsed hash from API: #{data.inspect}"
     
     render :text => "ok"
   end
