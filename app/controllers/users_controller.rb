@@ -4,6 +4,8 @@ class UsersController < ApplicationController
     config.columns << :venmo_id
     config.columns[:venmo_id].label = 'Venmo ID'
     config.create.columns.remove :expenses
+    
+    # config.actions.exclude [:create, :update, :delete]
   end
   
 end
