@@ -2,7 +2,7 @@ class ExpensesController < ApplicationController
   
   active_scaffold :expense do |config|    
     # Limited column display for usability
-    config.columns = [:user, :type, :amount, :note, :created_at]
+    config.list.columns = [:user, :type, :amount, :note, :created_at]
     
     # If using full display, comment line above and uncomment lines below
     # config.columns << :type_id
