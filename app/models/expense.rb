@@ -12,6 +12,14 @@ class Expense < ActiveRecord::Base
       else "unknown"
     end
   end
+  
+  def general?
+    type_id == 1
+  end
+  
+  def food?
+    type_id == 2
+  end
 
   def set_type_from_venmo_name(name)
     if name.downcase.include?("expenses")
@@ -20,6 +28,10 @@ class Expense < ActiveRecord::Base
       self.type_id = 2
     end
   end  
+  
+  def amount_per_person
+    self.amount / 8
+  end
   
   # display note as label in scaffold
   def to_label
