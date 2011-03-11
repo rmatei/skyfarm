@@ -5,13 +5,19 @@ class Expense < ActiveRecord::Base
   # Expense types:
   # type_id 1 - general (split equally)
   # type_id 2 - food (pro-rated)
-  def set_expense_type_from_venmo_name(name)
+  def type
+    case type_id
+    when 1 then "general expense"
+    when 2 then "food"
+  end
+
+  def set_type_from_venmo_name(name)
     if name.downcase.include?("expenses")
       self.type_id = 1
     elsif name.downcase.include?("food")
       self.type_id = 2
     end
-  end
+  end  
   
   # display note as label in scaffold
   alias_method_name :to_label, :note
