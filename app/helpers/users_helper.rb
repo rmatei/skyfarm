@@ -8,4 +8,8 @@ module UsersHelper
     number_to_currency record.monthly_rent, :precision => 0 
   end
   
+  def food_multiplier_column(record)
+    number_to_percentage record.food_multiplier*100, :precision => 0 
+  end
+  
 end
