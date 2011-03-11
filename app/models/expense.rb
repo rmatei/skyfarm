@@ -7,8 +7,10 @@ class Expense < ActiveRecord::Base
   # type_id 2 - food (pro-rated)
   def type
     case type_id
-    when 1 then "general expense"
-    when 2 then "food"
+      when 1 then "general expense"
+      when 2 then "food"
+      else "unknown"
+    end
   end
 
   def set_type_from_venmo_name(name)
