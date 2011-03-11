@@ -42,6 +42,7 @@ private
                           :pay_or_charge => data["pay_or_charge"])
     expense.set_type_from_venmo_name(data["from_user"]["full_name"])
     expense.save!
+    Rails.logger.info "Saved expense #{expense.note}."
   end
 
   def save_user(user_data)
