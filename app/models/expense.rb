@@ -24,12 +24,12 @@ class Expense < ActiveRecord::Base
   end
 
   def set_type_from_venmo_transaction(name)
-    if name.downcase.include?("expenses")
+    if note.downcase.include? "beer" or note.downcase.include? "wine"
+      self.type_id = 3
+    elsif name.downcase.include?("expenses")
       self.type_id = 1
     elsif name.downcase.include?("food")
       self.type_id = 2
-    elsif note.downcase.include? "beer" or note.downcase.include? "wine"
-      self.type_id = 3
     end
   end  
   
