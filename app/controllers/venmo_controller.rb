@@ -2,7 +2,16 @@ class VenmoController < ApplicationController
 
   # takes Venmo API call, creates new expense
   def track_receipt
-    # extracts serialized string from parameters
+    data = parse_params(params)
+    save_expense(data)
+    render :text => "ok"
+  end
+  
+private
+  
+  # deserializes data we got from Venmo
+  def parse_params(params)
+    # get serialized hash from params
     data = params.select {|k,v| k.to_s.include? "payment"}
     data = data.first.last.keys.first.dup
     
@@ -13,7 +22,7 @@ class VenmoController < ApplicationController
     data = JSON.parse data
     Rails.logger.info "parsed hash from API: #{data.inspect}"
     
-    render :text => "ok"
+    return data
   end
 
 end
