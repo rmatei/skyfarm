@@ -1,7 +1,7 @@
 module UsersHelper
   
   def profile_picture_column(record)
-    "<img src='#{record.profile_picture}' />"
+    image_tag(record.profile_picture).html_safe
   end
   
   def monthly_rent_column(record)
