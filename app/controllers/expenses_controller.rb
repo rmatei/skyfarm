@@ -9,6 +9,10 @@ class ExpensesController < ApplicationController
     # config.columns << :venmo_transaction_id
     # config.columns[:venmo_transaction_id].label = 'Venmo transaction ID'
     
+    # Latest first
+    config.list.sorting = { :created_at => :desc }
+    
+    # Don't allow any changes to DB, just reading
     config.actions = [:list, :show, :search]
   end
   
