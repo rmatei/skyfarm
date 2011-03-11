@@ -4,7 +4,7 @@ class ExpensesController < ApplicationController
     config.columns << :venmo_transaction_id
     config.columns[:venmo_transaction_id].label = 'Venmo transaction ID'
     
-    config.actions = [:list, :show]
+    config.actions = [:list, :show, :search]
   end
   
 end

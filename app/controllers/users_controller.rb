@@ -5,7 +5,7 @@ class UsersController < ApplicationController
     config.columns[:venmo_id].label = 'Venmo ID'
     config.create.columns.remove :expenses
     
-    config.actions = [:list, :show]
+    config.actions = [:list, :show, :search]
   end
   
 end
