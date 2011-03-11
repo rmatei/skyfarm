@@ -3,7 +3,14 @@ class VenmoController < ApplicationController
   # takes Venmo API call, creates new expense
   def track_receipt
     data = parse_params(params)
-    save_expense(data)
+    
+    # only save Skyfarm-related expenses
+    if(data["from_user"]["full_name"].downcase.include?("skyfarm"))
+      save_expense(data)
+    else
+      Rails.logger.info "Not tracking transaction from #{data["from_user"]["full_name"]} to #{data["to_user"]["full_name"]}."
+    end
+    
     render :text => "ok"
   end
   
