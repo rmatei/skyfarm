@@ -22,6 +22,8 @@ class Expense < ActiveRecord::Base
   end  
   
   # display note as label in scaffold
-  alias_method :to_label, :note
+  def to_label
+    note
+  end
   
 end
