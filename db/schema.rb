@@ -13,8 +13,7 @@
 ActiveRecord::Schema.define(:version => 20110309020248) do
 
   create_table "expenses", :force => true do |t|
-    t.integer  "from_user_id",         :null => false
-    t.integer  "to_user_id",           :null => false
+    t.integer  "user_id",              :null => false
     t.float    "amount",               :null => false
     t.string   "note"
     t.integer  "type_id",              :null => false
@@ -33,6 +32,7 @@ ActiveRecord::Schema.define(:version => 20110309020248) do
     t.string   "profile_picture"
     t.string   "email"
     t.float    "monthly_rent"
+    t.float    "food_multiplier"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

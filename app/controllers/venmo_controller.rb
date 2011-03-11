@@ -25,4 +25,29 @@ private
     return data
   end
 
+  # takes parsed data from venmo api and saves it to the database
+  def save_expense(data)
+    payer = save_user(data["to_user"])
+    expense = Expense.new(:user => payer,
+                          :amount => data["amount"].to_f,
+                          :note => data["note"],
+                          :venmo_transaction_id => data["transaction_id"],
+                          :pay_or_charge => data["pay_or_charge"])
+    expense.set_expense_type_from_venmo_name(data["from_user"]["full_name"])
+    expense.save!
+  end
+
+  def save_user(user_data)
+    venmo_id = user_data["user_id"].to_i
+    user = User.find_by_venmo_id(venmo_id) || User.new(:venmo_id => venmo_id)
+    user.venmo_username = user_data["username"]
+    user.facebook_id = user_data["facebook_id"].to_i
+    user.first_name = user_data["first_name"]
+    user.last_name = user_data["last_name"]
+    user.profile_picture = user_data["profile_picture"]
+    user.email = user_data["email"]
+    user.save
+    return user
+  end
+
 end

@@ -9,6 +9,7 @@ class CreateUsers < ActiveRecord::Migration
       t.string :profile_picture
       t.string :email
       t.float :monthly_rent
+      t.float :food_multiplier
 
       t.timestamps
     end
