@@ -4,8 +4,8 @@ module UsersHelper
     "<img src='#{record.profile_picture}' />"
   end
   
-  def user_monthly_rent_column(record)
-    number_to_currency record.monthly_rent
+  def monthly_rent_column(record)
+    number_to_currency record.monthly_rent, :precision => 0 
   end
   
 end
