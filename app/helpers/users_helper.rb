@@ -1,6 +1,6 @@
 module UsersHelper
   
-  def user_profile_picture_column(record)
+  def profile_picture_column(record)
     "<img src='#{record.profile_picture}' />"
   end
   
