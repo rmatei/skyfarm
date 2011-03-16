@@ -13,7 +13,7 @@ class ExpensesController < ApplicationController
     config.list.sorting = { :created_at => :desc }
     
     # Don't allow any changes to DB, just reading
-    config.actions = [:list, :show]#, :search]
+    config.actions = [:list, :show, :search]
   end
   
 end
