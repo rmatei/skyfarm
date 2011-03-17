@@ -13,7 +13,11 @@ module UsersHelper
   end
   
   def food_multiplier_column(record)
-    number_to_percentage record.food_multiplier*100, :precision => 0 
+    if record.food_multiplier
+      number_to_percentage record.food_multiplier*100, :precision => 0 
+    else
+      nil
+    end
   end
   
 end
