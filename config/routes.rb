@@ -1,4 +1,6 @@
 Skyfarm::Application.routes.draw do
+  resources :tallied_types do as_routes end
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
   

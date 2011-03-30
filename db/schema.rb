@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110309020248) do
+ActiveRecord::Schema.define(:version => 20110330194417) do
 
   create_table "expenses", :force => true do |t|
     t.integer  "user_id",              :null => false
@@ -19,6 +19,28 @@ ActiveRecord::Schema.define(:version => 20110309020248) do
     t.integer  "type_id",              :null => false
     t.integer  "venmo_transaction_id"
     t.string   "pay_or_charge"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "tallied_consumptions", :force => true do |t|
+    t.integer  "user_id"
+    t.integer  "tallied_item_id"
+    t.integer  "number"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "tallied_items", :force => true do |t|
+    t.string   "name"
+    t.float    "price"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "tallied_types", :force => true do |t|
+    t.string   "name"
+    t.float    "price"
     t.datetime "created_at"
     t.datetime "updated_at"
   end

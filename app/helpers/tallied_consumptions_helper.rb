@@ -1,0 +1,2 @@
+module TalliedConsumptionsHelper
+end

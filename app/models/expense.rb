@@ -34,7 +34,7 @@ class Expense < ActiveRecord::Base
   end  
   
   def amount_per_person
-    self.amount / 8
+    self.amount / User.count
   end
   
   # display note as label in scaffold
