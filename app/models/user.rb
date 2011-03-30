@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
   has_many :expenses
+  has_many :tallied_consumptions
   
   def full_name
     "#{first_name} #{last_name}"

@@ -1,6 +1,4 @@
 Skyfarm::Application.routes.draw do
-  resources :tallied_types do as_routes end
-
   # The priority is based upon order of creation:
   # first created -> highest priority.
   
@@ -21,8 +19,12 @@ Skyfarm::Application.routes.draw do
   # resources :products
   
   # map.resources :users, :active_scaffold :user
-  resources :users
-  resources :expenses
+  
+  # RESTful routing, commented out because we're using the legacy Rails routing
+  # resources :users
+  # resources :expenses
+  # resources :tallied_items
+  # resources :tallied_consumptions
 
   # Sample resource route with options:
   #   resources :products do
