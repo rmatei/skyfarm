@@ -1,11 +1,18 @@
-class Expense < ActiveRecord::Base
-    
+class Expense < ActiveRecord::Base    
   belongs_to :user
+  belongs_to :billing_period
+  
   
   # Expense types:
   # type_id 1 - general (split equally)
   # type_id 2 - food (pro-rated)
   # type_id 3 - booze (tallied, with remnant split equally)  
+  
+  scope :general, where(:type_id => 1)
+  scope :food, where(:type_id => 2)
+  scope :tallied, where(:type_id => 3)
+  
+  # returns a text label for the type
   def type
     case type_id
       when 1 then "general expense"

@@ -1,0 +1,15 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  user_id: 1
+  amount: 1.5
+  details: MyText
+  start_date: 2011-04-12 11:43:47
+  end_date: 2011-04-12 11:43:47
+
+two:
+  user_id: 1
+  amount: 1.5
+  details: MyText
+  start_date: 2011-04-12 11:43:47
+  end_date: 2011-04-12 11:43:47

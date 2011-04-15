@@ -1,6 +1,7 @@
 class User < ActiveRecord::Base
   has_many :expenses
   has_many :tallied_consumptions
+  has_many :payments
   
   def full_name
     "#{first_name} #{last_name}"
@@ -12,5 +13,5 @@ class User < ActiveRecord::Base
   
   # for Active Scaffold
   alias_method :to_label, :full_name
-
+  
 end
