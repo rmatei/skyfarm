@@ -7,6 +7,11 @@ class User < ActiveRecord::Base
     "#{first_name} #{last_name}"
   end
   
+  # "Richard Luke Dillman" -> "Richard"
+  def short_name
+    first_name.split(' ').first
+  end
+  
   def total_spent
     expenses.map(&:amount).inject{|sum,x| sum + x }
   end

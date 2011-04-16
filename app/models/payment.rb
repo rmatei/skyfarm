@@ -18,4 +18,8 @@ class Payment < ActiveRecord::Base
     end
     puts "\n"
   end
+  
+  def to_label
+    "#{user.short_name} - #{billing_period.to_label}"
+  end
 end

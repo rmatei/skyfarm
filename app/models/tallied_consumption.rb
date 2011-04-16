@@ -5,4 +5,8 @@ class TalliedConsumption < ActiveRecord::Base
   
   validates_presence_of :user
   validates_presence_of :tallied_item
+  
+  def to_label
+    "#{user.short_name} - #{tallied_item.name} (#{billing_period.to_label})"
+  end
 end

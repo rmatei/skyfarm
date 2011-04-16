@@ -16,7 +16,7 @@ You can edit which items are tracked on <%= link_to "this page", tallied_items_p
     <!-- Rows for people -->
     <% @users.each do |user| %>
       <tr>
-        <th><%= user.first_name.split(' ').first %></th>
+        <th><%= user.short_name %></th>
         
         <!-- Input fields -->
         <% @tallied_items.each do |item| %>

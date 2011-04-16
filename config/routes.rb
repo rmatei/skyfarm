@@ -22,11 +22,13 @@ Skyfarm::Application.routes.draw do
   
   # map.resources :users, :active_scaffold :user
   
-  # RESTful routing, commented out because we're using the legacy Rails routing
+  # RESTful routing (not used now except for named routes - legacy Rails routing is higher priority b/c Active Scaffold is old)
   resources :users
   resources :expenses
   resources :tallied_items
   resources :tallied_consumptions
+  resources :billing_periods
+  resources :payments
 
   # Sample resource route with options:
   #   resources :products do
