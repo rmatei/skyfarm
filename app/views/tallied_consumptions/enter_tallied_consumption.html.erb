@@ -1,0 +1,36 @@
+<h3>Enter how much people have consumed.</h3>
+You can do this as often as you like, it will add up at the end of the billing period. <br/>
+You can edit which items are tracked on <%= link_to "this page", tallied_items_path %>. <br/><br/>
+
+<%= form_tag('/save_tallied_consumption') do -%>
+  <table>
+    
+    <!-- Item headings -->
+    <tr>
+      <th></th>
+      <% @tallied_items.each do |item| %>
+        <th><%= item.name %> (<%= number_to_currency item.price %>)</th>
+      <% end %>
+    </tr>
+    
+    <!-- Rows for people -->
+    <% @users.each do |user| %>
+      <tr>
+        <th><%= user.first_name.split(' ').first %></th>
+        
+        <!-- Input fields -->
+        <% @tallied_items.each do |item| %>
+          <td>
+            <%= text_field_tag "tallied_consumptions[#{@counter}][number]", 0 %>
+            <%= hidden_field_tag "tallied_consumptions[#{@counter}][tallied_item_id]", item.id %>
+            <%= hidden_field_tag "tallied_consumptions[#{@counter}][user_id]", user.id %>
+            <% @counter += 1 %>
+          </td>
+        <% end %>
+        
+      </tr>
+    <% end %>
+    
+  </table>
+  <div><%= submit_tag 'Save' %></div>
+<% end -%>

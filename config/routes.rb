@@ -6,25 +6,27 @@ Skyfarm::Application.routes.draw do
   # Note: This route will make all actions in every controller accessible via GET requests.  
   # (Using this for Active Scaffold routes, since it's not a Rails 3 plugin)
   match ':controller(/:action(/:id(.:format)))'
-
+  
   # Sample of regular route:
   #   match 'products/:id' => 'catalog#view'
   # Keep in mind you can assign values other than :controller and :action
-
+  match 'enter_tallied_consumption' => 'tallied_consumptions#enter_tallied_consumption'
+  match 'save_tallied_consumption' => 'tallied_consumptions#save_tallied_consumption'  
+  
   # Sample of named route:
   #   match 'products/:id/purchase' => 'catalog#purchase', :as => :purchase
   # This route can be invoked with purchase_url(:id => product.id)
-
+  
   # Sample resource route (maps HTTP verbs to controller actions automatically):
   # resources :products
   
   # map.resources :users, :active_scaffold :user
   
   # RESTful routing, commented out because we're using the legacy Rails routing
-  # resources :users
-  # resources :expenses
-  # resources :tallied_items
-  # resources :tallied_consumptions
+  resources :users
+  resources :expenses
+  resources :tallied_items
+  resources :tallied_consumptions
 
   # Sample resource route with options:
   #   resources :products do
