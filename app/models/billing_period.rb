@@ -13,7 +13,7 @@ class BillingPeriod < ActiveRecord::Base
     bp.initialize_date_range
     bp.save!
     bp.compute_payments
-    bp.request_payments if bp.verify_amounts
+    bp.request_payments
   end
   
   
@@ -41,8 +41,12 @@ class BillingPeriod < ActiveRecord::Base
     split_food_expenses
     add_accounted_tallied_expenses
     split_unaccounted_tallied_expenses
+    verify_amounts
     
-    payments.each { |p| p.log }
+    payments.each do |p| 
+      p.save!
+      p.log
+    end
   end
   
   
@@ -52,11 +56,12 @@ class BillingPeriod < ActiveRecord::Base
   
   
   def to_label
-    "#{start_time.to_s(:short)} to #{end_time.to_s(:short)}"
+    "#{start_time.to_date.inspect} to #{end_time.to_date.inspect}"
   end
   
+
   
-  # private
+  private
   
   # claim expenses and tallied consumptions for this billing period
   def claim_expenses_for_period
@@ -66,6 +71,7 @@ class BillingPeriod < ActiveRecord::Base
     puts "#{expenses.count} expenses for current billing period"
     puts "#{tallied_consumptions.count} tallied_consumptions for current billing period"
   end
+
   
   # makes payment objects for each user
   def create_payments
@@ -74,6 +80,7 @@ class BillingPeriod < ActiveRecord::Base
     end
     puts "#{payments.count} payments created\n"
   end
+
   
   # adds rent to each payment
   def split_rent
@@ -82,6 +89,7 @@ class BillingPeriod < ActiveRecord::Base
       payment.details << {:category => "Rent", :amount => payment.user.monthly_rent, :details => []}
     end    
   end
+
   
   # adds general expenses to each payment
   def split_general_expenses
@@ -94,6 +102,7 @@ class BillingPeriod < ActiveRecord::Base
     end
   end
   
+
   # adds food expenses to each payment
   def split_food_expenses
     total_food_expenses = expenses.food.map(&:amount).inject{|sum,x| sum + x }
@@ -105,6 +114,7 @@ class BillingPeriod < ActiveRecord::Base
       payment.details << {:category => "Food expenses", :amount => amount_for_person, :details => details}
     end
   end
+
 
   # add checked off beers
   def add_accounted_tallied_expenses
@@ -123,6 +133,7 @@ class BillingPeriod < ActiveRecord::Base
     end
   end
 
+
   # adds unaccounted tallied expenses to each payment
   def split_unaccounted_tallied_expenses
     unaccounted_tallied_expenses = expenses.tallied.map(&:amount).inject{|sum,x| sum + x } - @accounted_tallied_expenses
@@ -134,6 +145,7 @@ class BillingPeriod < ActiveRecord::Base
     end
   end
     
+
   # store specific expenses so people know where the money's going
   def format_expenses_for_email_details(expenses)
     returning Array.new do |array|
@@ -147,21 +159,34 @@ class BillingPeriod < ActiveRecord::Base
   
   # VALIDATIONS
   
+  # sanity check
   def verify_amounts
-    false
+    total_expenses = expenses.map(&:amount).inject{|sum,x| sum + x } 
+    total_rent = User.all.map(&:monthly_rent).inject{|sum,x| sum + x }
+    total_billed = payments.map(&:amount).inject{|sum,x| sum + x }
+    puts "TOTAL BILLED: #{total_billed}"
+    puts "TOTAL EXPENSES: #{total_expenses + total_rent}"
+    
+    # check that amounts are within $0.10 of each other (allowing for some rounding error)
+    unless (total_expenses + total_rent - total_billed).abs < 0.10
+      raise "Amounts to be billed don't match total expenses!"
+    end
   end
+
 
   def end_after_start
     unless end_time > start_time
       errors.add_to_base('Start time must be before end time.')
     end
   end
+
   
   def no_overlapping_period
     if BillingPeriod.count(:conditions => ["start_time <= ? AND end_time >= ?", end_time, start_time]) > 0
       errors.add_to_base('Can\'t have overlapping billing periods.')
     end
   end
+
   
   def no_gap
     if BillingPeriod.count > 0 and (BillingPeriod.find(:first, :order => 'end_time DESC').end_time + 1.second) < start_time
@@ -169,6 +194,7 @@ class BillingPeriod < ActiveRecord::Base
     end
   end
   
+
   def not_in_future
     unless Time.now >= end_time
       errors.add_to_base('Can\'t bill into the future.')
