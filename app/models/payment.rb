@@ -11,7 +11,7 @@ class Payment < ActiveRecord::Base
       # items = category[:details].first(4).map {|e| e[:note].strip}.join(', ')
       puts "  #{category[:amount].round(2)} - #{category[:category]}"
       category[:details].first(4).each do |expense|
-        # puts "    #{expense[:amount].round(2)} - #{expense[:note].strip}"
+        puts "    #{expense[:amount].round(2)} - #{expense[:note].strip}"
         # puts "     - #{expense[:note].strip}"
       end
       # puts "    ..."

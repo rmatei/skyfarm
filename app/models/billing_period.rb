@@ -61,8 +61,8 @@ class BillingPeriod < ActiveRecord::Base
   # claim expenses and tallied consumptions for this billing period
   def claim_expenses_for_period
     Expense.update_all(["billing_period_id = ?", id], ["created_at >= ? AND created_at <= ?", start_time, end_time])
-    TalliedConsumption.update_all(["billing_period_id = ?", id], ["created_at >= ? AND created_at <= ?", start_time, end_time])
-    # raise "Need to have entered alcohol consumption for the month!" unless tallied_consumptions.count == User.count
+    TalliedConsumption.update_all(["billing_period_id = ?", id], ["created_at >= ? AND created_at <= ?", start_time, Time.now])#end_time])
+    raise "Need to have entered alcohol consumption for the month!" unless tallied_consumptions.count >= User.count * TalliedItem.count
     puts "#{expenses.count} expenses for current billing period"
     puts "#{tallied_consumptions.count} tallied_consumptions for current billing period"
   end
@@ -108,13 +108,24 @@ class BillingPeriod < ActiveRecord::Base
 
   # add checked off beers
   def add_accounted_tallied_expenses
-    
+    @accounted_tallied_expenses = 0
+    payments.each do |payment|
+      details = []
+      total_for_person = 0
+      tallied_consumptions.find_all_by_user_id(payment.user_id).each do |consumption|
+        amount_for_item = consumption.tallied_item.price * consumption.number
+        payment.amount += amount_for_item
+        total_for_person += amount_for_item
+        details << {:amount => amount_for_item, :note => "#{consumption.number} #{consumption.tallied_item.name.downcase.pluralize}"}
+      end
+      payment.details << {:category => "Tallied booze", :amount => total_for_person, :details => details}
+      @accounted_tallied_expenses += total_for_person
+    end
   end
 
   # adds unaccounted tallied expenses to each payment
   def split_unaccounted_tallied_expenses
-    accounted_tallied_expenses = tallied_consumptions.map(&:amount).inject{|sum,x| sum + x } || 0
-    unaccounted_tallied_expenses = expenses.tallied.map(&:amount).inject{|sum,x| sum + x } - accounted_tallied_expenses
+    unaccounted_tallied_expenses = expenses.tallied.map(&:amount).inject{|sum,x| sum + x } - @accounted_tallied_expenses
     amount_per_person = unaccounted_tallied_expenses / User.count
     details = format_expenses_for_email_details(expenses.tallied)
     payments.each do |payment|

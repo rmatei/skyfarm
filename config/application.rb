@@ -1,7 +1,9 @@
 require File.expand_path('../boot', __FILE__)
 
 require 'rails/all'
-# require 'lib/tasks/payments.rb'
+
+# need to require rake task manually for whatever reason
+require 'lib/tasks/payments.rb'
 
 # If you have a Gemfile, require the gems listed there, including any gems
 # you've limited to :test, :development, or :production.
