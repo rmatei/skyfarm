@@ -92,26 +92,37 @@ class BillingPeriod < ActiveRecord::Base
 
   
   # adds general expenses to each payment
+  # these are split evenly
   def split_general_expenses
-    total_general_expenses = expenses.general.map(&:amount).inject{|sum,x| sum + x }
-    amount_per_person = total_general_expenses / User.count
-    details = format_expenses_for_email_details(expenses.general)
-    payments.each do |payment|
-      payment.amount += amount_per_person
-      payment.details << {:category => "General expenses", :amount => amount_per_person, :details => details}
+    number_of_people = User.count
+    payments.each do |payment| # for each user
+      details = []
+      total_for_person = 0
+      expenses.general.sort_by {|e| e.amount}.reverse.each do |expense| # for each expense in category
+        amount_for_item = expense.amount / number_of_people
+        total_for_person += amount_for_item
+        details << {:amount => amount_for_item, :note => expense.note}
+      end
+      payment.amount += total_for_person
+      payment.details << {:category => "General", :amount => total_for_person, :details => details}
     end
   end
   
 
   # adds food expenses to each payment
+  # these are split proportionally to a food multiplier that ranges from 0 to 1
   def split_food_expenses
-    total_food_expenses = expenses.food.map(&:amount).inject{|sum,x| sum + x }
     total_food_multiplier = User.all.map(&:food_multiplier).inject{|sum,x| sum + x }
-    details = format_expenses_for_email_details(expenses.food)
-    payments.each do |payment|
-      amount_for_person = total_food_expenses * payment.user.food_multiplier / total_food_multiplier
-      payment.amount += amount_for_person
-      payment.details << {:category => "Food expenses", :amount => amount_for_person, :details => details}
+    payments.each do |payment| # for each user
+      details = []
+      total_for_person = 0
+      expenses.food.sort_by {|e| e.amount}.reverse.each do |expense| # for each expense in category
+        amount_for_item = expense.amount * payment.user.food_multiplier / total_food_multiplier
+        total_for_person += amount_for_item
+        details << {:amount => amount_for_item, :note => expense.note}
+      end
+      payment.amount += total_for_person
+      payment.details << {:category => "Food", :amount => total_for_person, :details => details}
     end
   end
 
@@ -122,26 +133,34 @@ class BillingPeriod < ActiveRecord::Base
     payments.each do |payment|
       details = []
       total_for_person = 0
-      tallied_consumptions.find_all_by_user_id(payment.user_id).each do |consumption|
+      tallied_consumptions.find_all_by_user_id(payment.user_id).sort_by {|tc| tc.number}.reverse.each do |consumption|
         amount_for_item = consumption.tallied_item.price * consumption.number
-        payment.amount += amount_for_item
-        total_for_person += amount_for_item
-        details << {:amount => amount_for_item, :note => "#{consumption.number} #{consumption.tallied_item.name.downcase.pluralize}"}
+        total_for_person += amount_for_item      
+        details << {:amount => amount_for_item, :note => "#{consumption.number} #{consumption.tallied_item.plural_name}"} if amount_for_item > 0
       end
       payment.details << {:category => "Tallied booze", :amount => total_for_person, :details => details}
+      payment.amount += total_for_person
       @accounted_tallied_expenses += total_for_person
     end
   end
 
 
   # adds unaccounted tallied expenses to each payment
+  # tallied-off ones are subtracted from purchased alcohol, rest is split evenly
   def split_unaccounted_tallied_expenses
-    unaccounted_tallied_expenses = expenses.tallied.map(&:amount).inject{|sum,x| sum + x } - @accounted_tallied_expenses
-    amount_per_person = unaccounted_tallied_expenses / User.count
-    details = format_expenses_for_email_details(expenses.tallied)
-    payments.each do |payment|
-      payment.amount += amount_per_person
-      payment.details << {:category => "Unaccounted booze", :amount => amount_per_person, :details => details}
+    number_of_people = User.count
+    unaccounted_ratio = 1 - (@accounted_tallied_expenses / expenses.tallied.map(&:amount).inject{|sum,x| sum + x })
+    payments.each do |payment| # for each user
+      details = []
+      total_for_person = 0
+      expenses.tallied.sort_by {|e| e.amount}.reverse.each do |expense| # for each expense in category
+        amount_for_item = expense.amount * unaccounted_ratio / number_of_people
+        total_for_person += amount_for_item
+        details << {:amount => amount_for_item, :note => expense.note}
+      end
+      payment.amount += total_for_person
+      # not including details for this cause they're confusing - we don't actually know what's unaccounted
+      payment.details << {:category => "Unaccounted booze (very approximate)", :amount => total_for_person, :details => []}
     end
   end
     

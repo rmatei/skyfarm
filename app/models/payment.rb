@@ -6,15 +6,12 @@ class Payment < ActiveRecord::Base
   serialize :details
   
   def log
-    puts "#{user.full_name}  =>  #{amount.round(2)}"
+    puts "\n#{user.full_name}  =>  #{amount.round(2)}"
     details.each do |category|
-      # items = category[:details].first(4).map {|e| e[:note].strip}.join(', ')
       puts "  #{category[:amount].round(2)} - #{category[:category]}"
-      category[:details].first(4).each do |expense|
+      category[:details].each do |expense|
         puts "    #{expense[:amount].round(2)} - #{expense[:note].strip}"
-        # puts "     - #{expense[:note].strip}"
       end
-      # puts "    ..."
     end
     puts "\n"
   end
