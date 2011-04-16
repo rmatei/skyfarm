@@ -19,4 +19,11 @@ class Payment < ActiveRecord::Base
   def to_label
     "#{user.short_name} - #{billing_period.to_label}"
   end
+  
+  # sends an email requesting payment
+  def request
+    puts "emailing #{user.email} for payment..."
+    Notifier.bill(self).deliver
+  end
+  
 end

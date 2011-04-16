@@ -1,0 +1,12 @@
+<p>
+  Hi farmer <%= @user.short_name %>! It is <%= Time.now %>
+</p>
+
+<p>
+  You owe <b><%= number_to_currency @payment.amount %></b> for the period from <%= @billing_period.start_time.to_date.inspect %> to <%= @billing_period.end_time.to_date.inspect %>.
+</p>
+
+<p>
+  <3, </br>
+  Skybot
+</p>
