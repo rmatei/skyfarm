@@ -155,7 +155,7 @@ class BillingPeriod < ActiveRecord::Base
       end
       payment.amount += total_for_person
       # not including details for this cause they're confusing - we don't actually know what's unaccounted
-      payment.details << {:category => "Unaccounted booze (very approximate)", :amount => total_for_person, :details => []}
+      payment.details << {:category => "Unaccounted booze + booze advance for next month", :amount => total_for_person, :details => []}
     end
   end
   

@@ -1,35 +1,46 @@
 <p>
-  Hi farmer <%= @user.short_name %>! It is <%= Time.now %>
+  Hi farmer <%= @user.short_name %>!
 </p>
 
 <p>
-  You owe <b><%= number_to_currency @payment.amount %></b> for the period from <%= @billing_period.start_time.to_date.inspect %> to <%= @billing_period.end_time.to_date.inspect %>.
+  You owe <b><%= number_to_currency @payment.amount %></b> for the period from <%= @billing_period.start_time.to_date.inspect %> to <%= @billing_period.end_time.to_date.inspect %>.<br/>
 </p>
-
+  
 <p>
-  Breakdown:
-  <table>
-    <!-- category (general, food, ...) -->
-    <% @payment.details.each do |category| %>
-      <!-- summary row for category -->
-      <tr>
-        <th><%= number_to_currency category[:amount] %></th>
-        <th><%= category[:category] %></th>
-      </tr>
-      <% category[:details].each do |expense| %>
-        <!-- broken-out expense -->
-        <tr>
-          <td><%= number_to_currency expense[:amount] %></td>
-          <td><%= expense[:note] %></td>
-          <td><%= expense[:time].to_date.inspect if expense[:time] %></td>
-        </tr>
-      <% end %>
-      <tr></tr>
-    <% end %>
-  </table>
+  Please pay it by this coming Friday by:
+  <ul>
+    <li><a href="https://www.paypal.com/us/cgi-bin/webscr?cmd=_send-money&nav=1">PayPal-ing rmatei@gmail.com</a> (saves time; select 'personal' > 'living expense' to avoid fees)</li>
+    <li>Cash or check to Rob</li>
+  </ul>
 </p>
 
 <p>
   <3, </br>
   Skybot
 </p>
+
+</br>
+<hr/>
+Breakdown:
+<ul>
+  <!-- category (general, food, ...) -->
+  <% @payment.details.each do |category| %>
+    <!-- summary row for category -->
+    <li>
+      <%= number_to_currency category[:amount] %> -
+      <%= category[:category] %>
+    </li>
+    <small>
+      <ul>
+        <% category[:details].each do |expense| %>
+          <!-- broken-out expense -->
+          <li>
+            <%= number_to_currency expense[:amount] %>
+            <%= expense[:note] %>
+          </li>
+        <% end %>
+      </ul>
+    </small>
+  <% end %>
+</ul>
+
