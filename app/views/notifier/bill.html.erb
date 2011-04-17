@@ -7,6 +7,29 @@
 </p>
 
 <p>
+  Breakdown:
+  <table>
+    <!-- category (general, food, ...) -->
+    <% @payment.details.each do |category| %>
+      <!-- summary row for category -->
+      <tr>
+        <th><%= number_to_currency category[:amount] %></th>
+        <th><%= category[:category] %></th>
+      </tr>
+      <% category[:details].each do |expense| %>
+        <!-- broken-out expense -->
+        <tr>
+          <td><%= number_to_currency expense[:amount] %></td>
+          <td><%= expense[:note] %></td>
+          <td><%= expense[:time].to_date.inspect if expense[:time] %></td>
+        </tr>
+      <% end %>
+      <tr></tr>
+    <% end %>
+  </table>
+</p>
+
+<p>
   <3, </br>
   Skybot
 </p>

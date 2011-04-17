@@ -96,7 +96,7 @@ class BillingPeriod < ActiveRecord::Base
       expenses.general.sort_by {|e| e.amount}.reverse.each do |expense| # for each expense in category
         amount_for_item = expense.amount / number_of_people
         total_for_person += amount_for_item
-        details << {:amount => amount_for_item, :note => expense.note}
+        details << {:amount => amount_for_item, :note => expense.note, :time => expense.created_at}
       end
       payment.amount += total_for_person
       payment.details << {:category => "General", :amount => total_for_person, :details => details}
@@ -114,7 +114,7 @@ class BillingPeriod < ActiveRecord::Base
       expenses.food.sort_by {|e| e.amount}.reverse.each do |expense| # for each expense in category
         amount_for_item = expense.amount * payment.user.food_multiplier / total_food_multiplier
         total_for_person += amount_for_item
-        details << {:amount => amount_for_item, :note => expense.note}
+        details << {:amount => amount_for_item, :note => expense.note, :time => expense.created_at}
       end
       payment.amount += total_for_person
       payment.details << {:category => "Food", :amount => total_for_person, :details => details}
@@ -151,21 +151,11 @@ class BillingPeriod < ActiveRecord::Base
       expenses.tallied.sort_by {|e| e.amount}.reverse.each do |expense| # for each expense in category
         amount_for_item = expense.amount * unaccounted_ratio / number_of_people
         total_for_person += amount_for_item
-        details << {:amount => amount_for_item, :note => expense.note}
+        details << {:amount => amount_for_item, :note => expense.note, :time => expense.created_at}
       end
       payment.amount += total_for_person
       # not including details for this cause they're confusing - we don't actually know what's unaccounted
       payment.details << {:category => "Unaccounted booze (very approximate)", :amount => total_for_person, :details => []}
-    end
-  end
-    
-
-  # store specific expenses so people know where the money's going
-  def format_expenses_for_email_details(expenses)
-    returning Array.new do |array|
-      expenses.sort_by {|e| e.amount}.reverse.each do |expense|
-        array << {:amount => expense.amount, :note => expense.note.gsub('for ', '')}
-      end
     end
   end
   

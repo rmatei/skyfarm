@@ -9,4 +9,12 @@ class PaymentsController < ApplicationController
     # Don't allow any changes to DB, just reading
     config.actions = [:list, :show, :search, :update]
   end
+  
+  # shows sample bill email from a payment
+  def email
+    @payment = Payment.find(params[:id])
+    @user = @payment.user
+    @billing_period = @payment.billing_period
+    render :template => 'notifier/bill'
+  end
 end
