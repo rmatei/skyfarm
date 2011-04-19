@@ -24,6 +24,7 @@ class Payment < ActiveRecord::Base
   def request
     puts "emailing #{user.email} for payment..."
     Notifier.bill(self).deliver
+    update_attribute :sent_request, true
   end
   
 end
