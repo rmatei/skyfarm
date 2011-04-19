@@ -129,7 +129,7 @@ class BillingPeriod < ActiveRecord::Base
       details = []
       total_for_person = 0
       tallied_consumptions.find_all_by_user_id(payment.user_id).sort_by {|tc| tc.number}.reverse.each do |consumption|
-        amount_for_item = consumption.tallied_item.price * consumption.number
+        amount_for_item = consumption.cost
         total_for_person += amount_for_item      
         details << {:amount => amount_for_item, :note => "#{consumption.number} #{consumption.tallied_item.plural_name}"} if amount_for_item > 0
       end

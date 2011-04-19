@@ -10,4 +10,9 @@ class TalliedConsumption < ActiveRecord::Base
     bp = billing_period ? " (#{billing_period.to_label})" : ""
     "#{user.short_name} - #{tallied_item.name}" + bp
   end
+  
+  def cost
+    tallied_item.price * number
+  end
+  
 end

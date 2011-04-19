@@ -1,7 +1,7 @@
 class TalliedConsumptionsController < ApplicationController
   active_scaffold :tallied_consumptions do |config|
     # Limited column display for usability
-    config.columns = [:user, :tallied_item, :number, :billing_period, :created_at]    
+    config.columns = [:user, :tallied_item, :number, :cost, :billing_period, :created_at]    
 
     # Latest first
     config.list.sorting = { :created_at => :desc }
