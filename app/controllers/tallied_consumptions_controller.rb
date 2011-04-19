@@ -20,6 +20,7 @@ class TalliedConsumptionsController < ApplicationController
   end
   
   def save_tallied_consumption
+    redirect_to root_url unless params['tallied_consumptions']
     params['tallied_consumptions'].each do |form_field|
       tallied_consumption = TalliedConsumption.new
       tallied_consumption.number = form_field.last["number"].to_i
