@@ -25,7 +25,7 @@ class BillingPeriod < ActiveRecord::Base
       # otherwise start after last billing period
       BillingPeriod.find(:first, :order => 'end_time DESC').end_time + 1.second
     end
-    self.end_time = Time.now.beginning_of_month
+    self.end_time = Time.now
   end
   
   
@@ -154,7 +154,7 @@ class BillingPeriod < ActiveRecord::Base
       end
       payment.amount += total_for_person
       # not including details for this cause they're confusing - we don't actually know what's unaccounted
-      payment.details << {:category => "Unaccounted booze + booze advance for next month (approximate)", :amount => total_for_person, :details => []}
+      payment.details << {:category => "Unaccounted booze + some booze advance for next month (approximate)", :amount => total_for_person, :details => []}
     end
   end
   
