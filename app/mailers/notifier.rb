@@ -5,7 +5,9 @@ class Notifier < ActionMailer::Base
     @payment = payment
     @user = payment.user
     @billing_period = payment.billing_period
-    mail(:to => "bot@skyfarmsf.com",#@user.email,
+    mail(:to => @user.email,
+         :subject => "Skyfarm bill for #{payment.billing_period.to_label}",
+         :reply_to => "rmatei@gmail.com",
          :bcc => ["rmatei@gmail.com", "bot@skyfarmsf.com"])
   end
 end

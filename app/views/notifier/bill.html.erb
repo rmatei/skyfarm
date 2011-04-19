@@ -3,20 +3,20 @@
 </p>
 
 <p>
-  You owe <b><%= number_to_currency @payment.amount %></b> for the period from <%= @billing_period.start_time.to_date.inspect %> to <%= @billing_period.end_time.to_date.inspect %>.<br/>
+  You owe <%= number_to_currency @payment.amount %> for the period from <%= @billing_period.start_time.to_date.inspect %> to <%= @billing_period.end_time.to_date.inspect %>.<br/>
 </p>
   
 <p>
-  Please pay it by this coming Friday by:
+  Please pay it by this coming Friday!
   <ul>
-    <li><a href="https://www.paypal.com/us/cgi-bin/webscr?cmd=_send-money&nav=1">PayPal-ing rmatei@gmail.com</a> (saves time; select 'personal' > 'living expense' to avoid fees)</li>
+    <li><b><a href="https://www.paypal.com/us/cgi-bin/webscr?cmd=_send-money&nav=1">PayPal <%= number_to_currency @payment.amount %> to rmatei@gmail.com</a></b> (saves time; select 'personal' > 'living expense' to avoid fees)</li>
     <li>Cash or check to Rob</li>
   </ul>
 </p>
 
 <p>
   <3, </br>
-  Skybot
+  Comrade Skybot
 </p>
 
 </br>

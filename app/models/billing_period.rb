@@ -13,7 +13,8 @@ class BillingPeriod < ActiveRecord::Base
     bp.initialize_date_range
     bp.save!
     bp.compute_payments
-    bp.payments.first(1).each { |payment| payment.request }
+    # bp.payments.each { |payment| payment.request }
+    bp.payments.find_by_user_id(2).request
   end
   
   
