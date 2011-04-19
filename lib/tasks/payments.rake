@@ -3,9 +3,14 @@ namespace :payments  do
   task :compute => :environment do
     BillingPeriod.compute_new_period
   end
-  
+
   desc "Send emails for each payment"
   task :request => :environment do
-    BillingPeriod.last.payments.each {|p| p.request if p.user.last_name == "Matei"}
+    BillingPeriod.last.payments.each { |p| p.request }
+  end
+  
+  desc "Send emails for each payment"
+  task :request_test => :environment do
+    BillingPeriod.last.payments.each { |p| p.request if p.user.last_name == "Matei" }
   end  
 end
