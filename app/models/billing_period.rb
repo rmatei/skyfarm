@@ -82,7 +82,11 @@ class BillingPeriod < ActiveRecord::Base
   # claim expenses and tallied consumptions for this billing period
   def claim_expenses_for_period
     Expense.update_all(["billing_period_id = ?", id], ["created_at >= ? AND created_at <= ?", start_time, end_time])
-    TalliedConsumption.update_all(["billing_period_id = ?", id], ["created_at >= ? AND created_at <= ?", start_time, Time.now])#end_time])
+    TalliedConsumption.update_all(["billing_period_id = ?", id], ["created_at >= ? AND created_at <= ?", start_time, end_time])
+    
+    # temp hack
+    TalliedConsumption.update_all(["billing_period_id = ?", BillingPeriod.first.id], ["created_at <= ?", Time.parse('April 19, 2011 20:00')])
+    
     raise "Need to have entered alcohol consumption for the month!" unless tallied_consumptions.count >= User.count * TalliedItem.count
     puts "#{expenses.count} expenses for current billing period"
     puts "#{tallied_consumptions.count} tallied_consumptions for current billing period"
