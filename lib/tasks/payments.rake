@@ -13,4 +13,10 @@ namespace :payments  do
   task :request_test => :environment do
     BillingPeriod.last.payments.each { |p| p.request if p.user.last_name == "Matei" }
   end  
+  
+  desc "Figure out how much to pay to rent payer"
+  task :rent => :environment do
+    BillingPeriod.last.print_rent_payback
+  end
+  
 end

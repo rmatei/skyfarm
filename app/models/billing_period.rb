@@ -53,6 +53,28 @@ class BillingPeriod < ActiveRecord::Base
     "#{start_time.to_date.inspect} to #{end_time.to_date.inspect}"
   end
   
+  
+  # say how much to pay Dave who pays rent
+  # & check that I get as much as I spent minus what I owe
+  def print_rent_payback
+    total_received = payments.select {|p| !["Robert", "Dave"].include? p.user.short_name}.map(&:amount).inject{|sum,x| sum + x }
+    
+    total_expenses = expenses.map(&:amount).inject{|sum,x| sum + x }
+    paid_to_dave = User.all.map(&:monthly_rent).inject {|sum,x| sum + x} - payments.select {|p| p.user.short_name == "Dave"}.first.amount
+    total_spent = total_expenses + paid_to_dave
+    owed = payments.select {|p| p.user.short_name == "Robert"}.first.amount
+    difference = total_spent - owed - total_received
+    
+    puts "Pay Dave #{paid_to_dave.round(2)}"
+    puts "\nSpent #{total_spent.round(2)}"
+    puts "Receiving #{total_received.round(2)}"
+    puts "Owe #{owed.round(2)}"
+    puts "___________"
+    puts "Difference: #{difference.round(2)}"
+    puts difference.abs < 1 ? "OK!" : "!!!Not OK!!!"
+  end
+  
+  
 
   
   private
@@ -175,7 +197,7 @@ class BillingPeriod < ActiveRecord::Base
       raise "Amounts to be billed don't match total expenses!"
     end
   end
-
+  
 
   def end_after_start
     unless end_time > start_time

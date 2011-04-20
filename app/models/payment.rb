@@ -16,8 +16,9 @@ class Payment < ActiveRecord::Base
     puts "\n"
   end
   
-  # for Active Scaffold
-  alias_method :to_label, :amount
+  def to_label
+    "$#{amount.round(2)}"
+  end
   
   # sends an email requesting payment
   def request
