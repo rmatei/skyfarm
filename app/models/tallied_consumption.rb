@@ -7,8 +7,7 @@ class TalliedConsumption < ActiveRecord::Base
   validates_presence_of :tallied_item
   
   def to_label
-    bp = billing_period ? " (#{billing_period.to_label})" : ""
-    "#{user.short_name} - #{tallied_item.name}" + bp
+    "#{number} #{tallied_item.name.downcase.pluralize}"
   end
   
   def cost

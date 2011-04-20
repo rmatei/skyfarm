@@ -1,0 +1,2 @@
+module HerestrauHelper
+end

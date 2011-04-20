@@ -7,7 +7,7 @@ class PaymentsController < ApplicationController
     config.list.sorting = { :billing_period_id => :desc }
 
     # Don't allow any changes to DB, just reading
-    config.actions = [:list, :show, :search, :update]
+    config.actions = [:list, :show, :search]
   end
   
   # shows sample bill email from a payment

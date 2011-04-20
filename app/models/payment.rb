@@ -16,9 +16,8 @@ class Payment < ActiveRecord::Base
     puts "\n"
   end
   
-  def to_label
-    "#{user.short_name} - #{billing_period.to_label}"
-  end
+  # for Active Scaffold
+  alias_method :to_label, :amount
   
   # sends an email requesting payment
   def request
