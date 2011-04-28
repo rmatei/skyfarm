@@ -8,6 +8,6 @@ class Notifier < ActionMailer::Base
     mail(:to => @user.email,
          :subject => "Skyfarm bill for #{payment.billing_period.to_label}",
          :reply_to => "rmatei@gmail.com",
-         :bcc => ["rmatei@gmail.com", "bot@skyfarmsf.com"])
+         :bcc => ["bot@skyfarmsf.com"])
   end
 end

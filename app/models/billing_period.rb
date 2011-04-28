@@ -55,7 +55,7 @@ class BillingPeriod < ActiveRecord::Base
   
   
   # say how much to pay Dave who pays rent
-  # & check that I get as much as I spent minus what I owe
+  # & sanity check that I get as much as I spent minus what I owe
   def print_rent_payback
     total_received = payments.select {|p| !["Robert", "Dave"].include? p.user.short_name}.map(&:amount).inject{|sum,x| sum + x }
     

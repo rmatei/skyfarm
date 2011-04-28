@@ -4,6 +4,9 @@ class Payment < ActiveRecord::Base
   validates_presence_of :amount, :user
   validates_uniqueness_of :billing_period_id, :scope => :user_id
   serialize :details
+
+  scope :paid, where(:paid => true)
+  scope :unpaid, where(:paid => false)
   
   def log
     puts "\n#{user.full_name}  =>  #{amount.round(2)}"

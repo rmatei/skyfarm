@@ -5,7 +5,7 @@ class VenmoController < ApplicationController
     data = parse_params(params)
     
     # only save Skyfarm-related expenses
-    if(data["from_user"]["full_name"].downcase.include?("skyfarm"))
+    if(data["from_user"]["full_name"].downcase.include?("skyfarm") and data["amount"].to_f > 0)
       save_expense(data)
     else
       Rails.logger.info "Not tracking transaction from #{data["from_user"]["full_name"]} to #{data["to_user"]["full_name"]}."

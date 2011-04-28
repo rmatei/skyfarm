@@ -4,12 +4,12 @@ namespace :payments  do
     BillingPeriod.compute_new_period
   end
 
-  desc "Send emails for each payment"
+  desc "Send emails for each unpaid payment"
   task :request => :environment do
-    BillingPeriod.last.payments.each { |p| p.request }
+    Payment.unpaid.each { |p| p.request }
   end
   
-  desc "Send emails for each payment"
+  desc "Test e-mail sending capability"
   task :request_test => :environment do
     BillingPeriod.last.payments.each { |p| p.request if p.user.last_name == "Matei" }
   end  
