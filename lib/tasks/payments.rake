@@ -4,6 +4,15 @@ namespace :payments  do
     BillingPeriod.compute_new_period
   end
 
+  desc "Undo the last rake payments:compute"
+  task :rollback => :environment do
+    bp = BillingPeriod.last
+    bp.expenses.each {|e| e.update_attribute :billing_period_id, nil}
+    bp.tallied_consumptions.each {|e| e.update_attribute :billing_period_id, nil}
+    bp.payments.each {|e| e.destroy}
+    bp.destroy
+  end
+
   desc "Send emails for each unpaid payment"
   task :request => :environment do
     Payment.unpaid.each { |p| p.request }
