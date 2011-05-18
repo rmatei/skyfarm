@@ -1,0 +1,22 @@
+What?
+-----
+
+Automated expense & billing system for communal households and other groups. 
+
+What it does
+------------ 
+
+* reimburse people who buy things for the group 
+* track food on a pro-rated basis for people who spend different amounts of time in the house
+* track items like beer and wine on a tally basis
+* automatically bill members at the end of the month
+
+Build using
+-----------
+
+* Rails 3
+* the Venmo API for payments
+* Active Scaffold
+* Heroku
+
+This was created by Robert Cezar Matei and Richard Luke Dillman for the the lovely Skyfarm, located in the Mission District of San Francisco. Contact @rmatei if you're interested in implementing this for your group.
