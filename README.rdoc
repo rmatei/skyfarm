@@ -1,19 +1,13 @@
-What?
------
-
+== What?
 Automated expense & billing system for communal households and other groups. 
 
-What it does
------------- 
-
+= What it does
 * reimburse people who buy things for the group 
 * track food on a pro-rated basis for people who spend different amounts of time in the house
 * track items like beer and wine on a tally basis
 * automatically bill members at the end of the month
 
-Build using
------------
-
+= Built using
 * Rails 3
 * the Venmo API for payments
 * Active Scaffold
