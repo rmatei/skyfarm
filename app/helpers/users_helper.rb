@@ -12,9 +12,17 @@ module UsersHelper
     number_to_currency record.total_spent
   end
   
-  def food_multiplier_column(record)
-    if record.food_multiplier
-      number_to_percentage record.food_multiplier*100, :precision => 0 
+  def food_coefficient_column(record)
+    if record.food_coefficient
+      number_to_percentage record.food_coefficient*100, :precision => 0 
+    else
+      nil
+    end
+  end
+  
+  def expenses_coefficient_column(record)
+    if record.expenses_coefficient
+      number_to_percentage record.expenses_coefficient*100, :precision => 0 
     else
       nil
     end
