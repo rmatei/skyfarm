@@ -12,7 +12,7 @@ class UsersController < ApplicationController
     config.create.columns.remove :expenses
     
     # Don't allow any changes to DB, just reading
-    # config.actions = [:list, :show, :search]
+    config.actions = [:list, :show, :search]
   end
   
 end

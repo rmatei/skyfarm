@@ -109,14 +109,14 @@ class BillingPeriod < ActiveRecord::Base
 
   
   # adds general expenses to each payment
-  # these are split evenly
+  # these are split proportionally to a food multiplier that ranges from 0 to 1
   def split_general_expenses
-    number_of_people = User.count
+    total_expenses_coefficient = User.all.map(&:expenses_coefficient).inject{|sum,x| sum + x }
     payments.each do |payment| # for each user
       details = []
       total_for_person = 0
       expenses.general.sort_by {|e| e.amount}.reverse.each do |expense| # for each expense in category
-        amount_for_item = expense.amount / number_of_people
+        amount_for_item = expense.amount * payment.user.expenses_coefficient / total_expenses_coefficient
         total_for_person += amount_for_item
         details << {:amount => amount_for_item, :note => expense.note, :time => expense.created_at}
       end
@@ -124,7 +124,6 @@ class BillingPeriod < ActiveRecord::Base
       payment.details << {:category => "General", :amount => total_for_person, :details => details}
     end
   end
-  
 
   # adds food expenses to each payment
   # these are split proportionally to a food multiplier that ranges from 0 to 1
