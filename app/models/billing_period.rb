@@ -84,7 +84,7 @@ class BillingPeriod < ActiveRecord::Base
     Expense.update_all(["billing_period_id = ?", id], ["created_at >= ? AND created_at <= ?", start_time, end_time])
     TalliedConsumption.update_all(["billing_period_id = ?", id], ["created_at >= ? AND created_at <= ?", start_time, end_time])
         
-    raise "Need to have entered alcohol consumption for the month!" unless tallied_consumptions.count >= User.count * TalliedItem.count
+    # raise "Need to have entered alcohol consumption for the month!" unless tallied_consumptions.count >= User.count * TalliedItem.count
     puts "#{expenses.count} expenses for current billing period"
     puts "#{tallied_consumptions.count} tallied_consumptions for current billing period"
   end
