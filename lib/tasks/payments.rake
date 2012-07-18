@@ -15,7 +15,7 @@ namespace :payments  do
 
   desc "Send emails for each unpaid payment"
   task :request => :environment do
-    Payment.unpaid.each { |p| p.request }
+    BillingPeriod.last.payments.unpaid.each { |p| p.request }
   end
   
   desc "Test e-mail sending capability"
