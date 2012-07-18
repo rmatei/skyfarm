@@ -2,6 +2,8 @@ class User < ActiveRecord::Base
   has_many :expenses
   has_many :tallied_consumptions
   has_many :payments
+
+  scope :active, where(:retired => false)
   
   def full_name
     "#{first_name} #{last_name}"

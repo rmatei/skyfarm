@@ -14,7 +14,7 @@ class TalliedConsumptionsController < ApplicationController
   # this is done once a month by the alcohol person (Joseles).
   # will create a rake task to remind that person.
   def enter_tallied_consumption
-    @users = User.all
+    @users = User.active
     @tallied_items = TalliedItem.all
     @counter = 0
   end

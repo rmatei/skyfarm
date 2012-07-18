@@ -60,7 +60,7 @@ class BillingPeriod < ActiveRecord::Base
     total_received = payments.select {|p| !["Robert", "Dave"].include? p.user.short_name}.map(&:amount).inject{|sum,x| sum + x }
     
     total_expenses = expenses.map(&:amount).inject{|sum,x| sum + x }
-    paid_to_dave = User.all.map(&:monthly_rent).inject {|sum,x| sum + x} - payments.select {|p| p.user.short_name == "Dave"}.first.amount
+    paid_to_dave = User.active.map(&:monthly_rent).inject {|sum,x| sum + x} - payments.select {|p| p.user.short_name == "Dave"}.first.amount
     total_spent = total_expenses + paid_to_dave
     owed = payments.select {|p| p.user.short_name == "Robert"}.first.amount
     difference = total_spent - owed - total_received
@@ -84,7 +84,7 @@ class BillingPeriod < ActiveRecord::Base
     Expense.update_all(["billing_period_id = ?", id], ["created_at >= ? AND created_at <= ?", start_time, end_time])
     TalliedConsumption.update_all(["billing_period_id = ?", id], ["created_at >= ? AND created_at <= ?", start_time, end_time])
         
-    raise "Need to have entered alcohol consumption for the month!" unless tallied_consumptions.count >= User.count * TalliedItem.count
+    raise "Need to have entered alcohol consumption for the month!" unless tallied_consumptions.count >= User.active.count * TalliedItem.count
     puts "#{expenses.count} expenses for current billing period"
     puts "#{tallied_consumptions.count} tallied_consumptions for current billing period"
   end
@@ -92,7 +92,7 @@ class BillingPeriod < ActiveRecord::Base
   
   # makes payment objects for each user
   def create_payments
-    User.all.each do |user|
+    User.active.each do |user|
       Payment.create!(:user => user, :billing_period => self, :amount => 0, :details => [])
     end
     puts "#{payments.count} payments created\n"
@@ -111,7 +111,7 @@ class BillingPeriod < ActiveRecord::Base
   # adds general expenses to each payment
   # these are split proportionally to a food multiplier that ranges from 0 to 1
   def split_general_expenses
-    total_expenses_coefficient = User.all.map(&:expenses_coefficient).inject{|sum,x| sum + x }
+    total_expenses_coefficient = User.active.map(&:expenses_coefficient).inject{|sum,x| sum + x }
     payments.each do |payment| # for each user
       details = []
       total_for_person = 0
@@ -128,7 +128,7 @@ class BillingPeriod < ActiveRecord::Base
   # adds food expenses to each payment
   # these are split proportionally to a food multiplier that ranges from 0 to 1
   def split_food_expenses
-    total_food_coefficient = User.all.map(&:food_coefficient).inject{|sum,x| sum + x }
+    total_food_coefficient = User.active.map(&:food_coefficient).inject{|sum,x| sum + x }
     payments.each do |payment| # for each user
       details = []
       total_for_person = 0
@@ -164,7 +164,7 @@ class BillingPeriod < ActiveRecord::Base
   # adds unaccounted tallied expenses to each payment
   # tallied-off ones are subtracted from purchased alcohol, rest is split evenly
   def split_unaccounted_tallied_expenses
-    number_of_people = User.count
+    number_of_people = User.active.count
     unaccounted_ratio = 1 - (@accounted_tallied_expenses / expenses.tallied.map(&:amount).inject{|sum,x| sum + x })
     payments.each do |payment| # for each user
       details = []
@@ -187,7 +187,7 @@ class BillingPeriod < ActiveRecord::Base
   # sanity check
   def verify_amounts
     total_expenses = expenses.map(&:amount).inject{|sum,x| sum + x } 
-    total_rent = User.all.map(&:monthly_rent).inject{|sum,x| sum + x }
+    total_rent = User.active.map(&:monthly_rent).inject{|sum,x| sum + x }
     total_billed = payments.map(&:amount).inject{|sum,x| sum + x }
     puts "TOTAL BILLED: #{total_billed}"
     puts "TOTAL EXPENSES: #{total_expenses + total_rent}"
