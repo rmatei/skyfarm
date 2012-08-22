@@ -4,7 +4,8 @@ class VenmoController < ApplicationController
 
   # takes Venmo API call, creates new expense
   def track_receipt_v2
-    payments = get_payments(params)
+    data = parse_params(params)
+    payments = get_payments(data)
     
     payments.each do |payment|
       # only save Skyfarm-related expenses
@@ -27,6 +28,15 @@ class VenmoController < ApplicationController
 private
   
   # deserializes data we got from Venmo
+  def parse_params(params)
+    data = params.select {|k,v| k.to_s.include? "payment"}
+    data = data[0][0]
+    data = JSON.parse data
+    Rails.logger.info "Parsed hash from API: #{data.inspect}"
+    
+    return data
+  end
+
   def get_payments(params)
     Rails.logger.info "Got params: #{params.inspect}"
     payments = params['payments'].split('.')[1]
