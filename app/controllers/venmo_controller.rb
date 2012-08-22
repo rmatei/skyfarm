@@ -20,7 +20,7 @@ class VenmoController < ApplicationController
   end
 
   def track_receipt
-    Rails.logger.info "Call to deprecated API endpoint with params: #{params.inspect}"
+    Rails.logger.info "Call to deprecated API endpoint."
     render :text => "deprecated"
   end
   
@@ -42,6 +42,7 @@ private
     payments = params['payments'].split('.')[1]
     payments = Base64.decode64(payments)
     payments += ']' unless payments[-1,1] == ']'
+    payments += '}]' unless payments[-1,1] == '}]'
     payments = JSON.parse(payments)
     Rails.logger.info "Got payments from API: #{payments.inspect}"
     return payments
