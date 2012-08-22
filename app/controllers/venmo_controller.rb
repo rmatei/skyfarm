@@ -1,15 +1,18 @@
+require 'base64'
+
 class VenmoController < ApplicationController
 
   # takes Venmo API call, creates new expense
   def track_receipt_v2
-    Rails.logger.info "got params: #{params}"
-    data = parse_params(params)
+    payments = get_payments(params)
     
-    # only save Skyfarm-related expenses
-    if(data["from_user"]["full_name"].downcase.include?("skyfarm") and data["amount"].to_f > 0)
-      save_expense(data)
-    else
-      Rails.logger.info "Not tracking transaction from #{data["from_user"]["full_name"]} to #{data["to_user"]["full_name"]}."
+    payments.each do |payment|
+      # only save Skyfarm-related expenses
+      if(payment["from_user"]["full_name"].downcase.include?("skyfarm") and payment["amount"].to_f > 0)
+        save_expense(payment)
+      else
+        Rails.logger.info "Not tracking transaction from #{payment["from_user"]["full_name"]} to #{payment["to_user"]["full_name"]}."
+      end
     end
     
     render :text => "ok"
@@ -23,19 +26,12 @@ class VenmoController < ApplicationController
 private
   
   # deserializes data we got from Venmo
-  def parse_params(params)
-    # get serialized hash from params
-    data = params.select {|k,v| k.to_s.include? "payment"}
-    data = data.first.last.keys.first.dup
-    
-    # remove malformed parameter that JSON chokes on
-    data = data.gsub(/\"img_url.*?, /m, "")
-    
-    # parse JSON
-    data = JSON.parse data
-    Rails.logger.info "parsed hash from API: #{data.inspect}"
-    
-    return data
+  def get_payments(params)
+    payments = params['payments'].split('.')[1]
+    payments = Base64.decode64(payments)
+    payments = JSON.parse(payments)
+    Rails.logger.info "Got payments from API: #{payments.inspect}"
+    return payments
   end
 
   # takes parsed data from venmo api and saves it to the database
