@@ -1,7 +1,8 @@
 class VenmoController < ApplicationController
 
   # takes Venmo API call, creates new expense
-  def track_receipt
+  def track_receipt_v2
+    Rails.logger.info "got params: #{params}"
     data = parse_params(params)
     
     # only save Skyfarm-related expenses
@@ -13,7 +14,12 @@ class VenmoController < ApplicationController
     
     render :text => "ok"
   end
+
+  def track_receipt
+    render :text => "deprecated"
+  end
   
+
 private
   
   # deserializes data we got from Venmo
