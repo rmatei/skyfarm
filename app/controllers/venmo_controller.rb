@@ -41,8 +41,8 @@ private
     Rails.logger.info "Got params: #{params.inspect}"
     payments = params['payments'].split('.')[1]
     payments = Base64.decode64(payments)
-    payments += ']' unless payments[-1,1] == ']'
-    payments += '}]' unless payments[-1,1] == '}]'
+    payments += ']' if payments[-1,1] == '}'
+    payments += '}]' unless payments[-2,2] == '}]'
     payments = JSON.parse(payments)
     Rails.logger.info "Got payments from API: #{payments.inspect}"
     return payments
