@@ -39,7 +39,9 @@ class BillingPeriod < ActiveRecord::Base
     split_general_expenses
     split_food_expenses
     add_accounted_tallied_expenses
-    split_unaccounted_tallied_expenses
+    if expenses.tallied.count > 0
+      split_unaccounted_tallied_expenses
+    end
     verify_amounts
     
     payments.each do |p| 
