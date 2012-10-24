@@ -42,7 +42,7 @@ class BillingPeriod < ActiveRecord::Base
     if expenses.tallied.count > 0
       split_unaccounted_tallied_expenses
     end
-    verify_amounts
+    # verify_amounts
     
     payments.each do |p| 
       p.save!
